@@ -1,269 +1,238 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Coding Dojo : Java8 et les streams</title>
-    <meta charset="utf-8"/>
-    <link rel="stylesheet" href="components/normalize-css/normalize.css"/>
-    <link rel="stylesheet" href="components/font-awesome/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="components/highlightjs/styles/tomorrow.css"/>
-    <link rel="stylesheet" href="css/ruban.css"/>
-    <link rel="stylesheet" href="css/ruban-print.min.css" media="print"/>
-    <link rel="stylesheet" href="css/custom.css"/>
+  <meta charset="utf-8" />
+  <title>java 8</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 
 <body>
-<section id="coding-dojo" class="coding-dojo title">
-    <h1><img class="img-centered" src="images/codingDojo.png"></h1>
-</section>
+  <textarea id="source">
+    class: coding-dojo, title
 
-<section id="intro" class="coding-dojo">
-    <h1>Coding Dojo ?</h1>
-    <ul class="steps">
-        <li>C'est quoi ?</li>
-        <!-- Dojo : lieu d'apprentissage des arts martiaux - Kata : forme d'entrainement, répétition d'un exercice -->
-        <li class="subSection">Lieu d'apprentissage</li>
-        <li>Pour quoi faire ?</li>
-        <!-- l'objectif premier est d'apprendre et non pas de terminer l'excercice -->
-        <li class="strike">Terminer l'exercice</li>
-        <li class="strike">Compétition</li>
-        <li class="subSection">S'améliorer en développement</li>
-        <li class="subSection"><strong>APPRENDRE !</strong></li>
-        <li>Terrain d'entrainement</li>
-        <!-- Safe (no prod), error is ok, favoriser l'échange -->
-        <li class="strike">Pression</li>
-        <li class="subSection">Error is ok</li>
-    </ul>
-</section>
-<section id="organisation" class="coding-dojo">
-    <h1>Organisation</h1>
-    <ul class="steps">
-        <li>Pair Programming</li>
-        <li>TDD :
-            <ul>
-                <li style="color: red">Red</li>
-                <li style="color: #008000">Green</li>
-                <li>Refactor</li>
-            </ul>
-        </li>
-        <li>Sujet : Java 8 et les streams</li>
-    </ul>
-</section>
-<section id="planning" class="coding-dojo">
-    <h1><i class="fa fa-clock-o"></i> Planning du dojo</h1>
-    <ul>
-        <li>un peu de Théorie (20min.)</li>
-        <li>Une itération pour commencer (20min.)</li>
-        <li>Rétro. (5min.)</li>
-        <li>Itération2 (20min.)</li>
-        <li>Rétro. (5min.)</li>
-        <li>Itération3 (20min.)</li>
-        <li>Rétro. (5min.)</li>
-        <li>Rétro. & Conclusion (10min.)</li>
-    </ul>
-</section>
-<section id="installation" class="coding-dojo">
-    <h1><i class="fa fa-download"></i> Installation</h1>
-    <ul>
-        <li>
-            Environnement : (Eclipse ou pour changer <a href="https://www.jetbrains.com/idea/">IntelliJ</a>)
-        </li>
-        <li><a href="https://github.com/jripault/KataMock">Le code</a></li>
-        <li>Pour les tests :
-            <ul>
-                <li><a href="http://junit.org/">Junit</a></li>
-                <li>
-                    <a href="http://joel-costigliola.github.io/assertj/">AssertJ</a> (librairie d'assertions, fork de
-                    FestAssert)
-                </li>
-                <li><a href="http://www.eclemma.org/">Eclemma</a> (plugin couverture de code sous Eclipse)</li>
-                <li>
-                    <a href="http://infinitest.github.io/">InfiniTest</a> (plugin IntelliJ/Eclipse pour lancer les tests
-                    unitaires automatiquement à chaque changement)
-                </li>
-                <li>
-                    <a href="http://moreunit.sourceforge.net/">MoreUnit</a> (plugin IntelliJ/Eclipse pour améliorer
-                    l'intégration de ses tests unitaires dans l'IDE)
-                </li>
-            </ul>
-        </li>
-    </ul>
-</section>
+    ![:scale 100%](images/codingDojo.png)
 
-<section id="kata" class="kata title">
-    <h1 style="text-align: center;">Kata !!!</h1>
-    <ul class="steps">
-        <li>
-            <blockquote>Whatever luck I had, I made. I was never a natural athlete, but I paid my dues in sweat and
-                concentration and took the time necessary to learn Karate and become World Champion.
-            </blockquote>
-        </li>
-        <li>
-            <small>Chuck Norris (American martial artist and actor. Also, the only man who has counted to infinity.
-                <strong>Twice.</strong>)
-            </small>
-        </li>
-    </ul>
-</section>
+    ---
 
-<section id="theorie" class="coding-dojo">
-    <h1><i class="fa"></i>Un peu de théorie</h1>
-    <h4>Quoi de neuf dans Java 8 (release date : 18/03/2014)</h4>
-    <ul class="items">
-        <li>Interfaces - default method</li>
-        <li>Date & Time</li>
-        <li>Collections - forEach, ...</li>
-        <li>Optional</li>
-        <li>Lambda & FunctionalInterface</li>
-        <li>Streams</li>
-    </ul>
-</section>
+    # Coding Dojo ?
 
-<section id="theorie-optional" class="coding-dojo">
-    <h1><i class="fa"></i>Un peu de théorie - Optional</h1>
-    <ul>
-        <li>Représente la présence ou non d'une valeur :
-            <pre>Optional&lt;Integer&gt;</pre>
-        </li>
-        <li>Eviter les null checks (isPresent, ifPresent)
-            <pre>personRepository.getWinnerByName2(name)
-                .ifPresent(p -> sendMail(p.getMail(), "You win..."));</pre>
-        </li>
-        <li>orElse, orElseGet, orElseThrow
-            <pre>personRepository.getWinnerByName3("Wendy")
-        .orElse(new Person().setName("anonymous"))
-        .getName());
-            </pre>
-            <pre>personRepository.getWinnerByName3("Wendy")
-                    .orElseGet(() -> personRepository.getWinnerByName3("Mathilde").get())
-                    .getName());
-            </pre>
-            <pre>personRepository.getWinnerByName3("Wendy")
-                .orElseThrow(IllegalArgumentException::new);
-            </pre>
-        </li>
-    </ul>
-</section>
+    * C'est quoi ?
+      - Lieu d'apprentissage
+    * Pour quoi faire ?
+      - ~~Terminer l'exercice~~
+      - ~~Compétition~~
+      - S'améliorer en développement
+      - **APPRENDRE** !
+    * Terrain d'entrainement
+      - ~~Pression~~
+      - Error is ok
 
-<section id="theorie-fi" class="coding-dojo">
-    <h1><i class="fa"></i>Un peu de théorie - FunctionalInterface</h1>
-    <ul>
-        <li>Interface avec une unique méthode abstraite</li>
-        <li>
-            <pre>@FunctionalInterface</pre>
-            (pas obligatoire)
-        </li>
-        <li>A la base des lambdas</li>
-    </ul>
-</section>
+    ---
 
-<section id="theorie-lambda" class="coding-dojo">
-    <h1><i class="fa"></i>Un peu de théorie - Lambda</h1>
-    <ul>
-        <li>Eviter les classes anonymes
-            <pre>Name res = parser.parse("Eric Clapton", new Creator&lt;Name&gt;() {
-    @Override
-    public Name create(String firstName, String lastName) {
-        return new Name(firstName, lastName);
+    # Organisation
+
+    * Pair Programming
+    * TDD :
+      - Red
+      - Green
+      - Refactor
+    
+    * Sujet : Java 8 et les streams
+
+    ---
+
+    # Planning du dojo
+
+    * un peu de Théorie (20min.)
+    * Une itération pour commencer (20min.)
+    * Rétro. (5min.)
+    * Itération2 (20min.)
+    * Rétro. (5min.)
+    * Itération3 (20min.)
+    * Rétro. (5min.)
+    * Rétro. & Conclusion (10min.)
+
+    ---
+
+    # Installation
+
+    * Environnement : (Eclipse ou pour changer [IntelliJ](https://www.jetbrains.com/idea/))
+    * Le [code](https://github.com/jripault/KataMock)
+    * Pour les tests :
+      * [Junit](http://junit.org/)
+      * [AssertJ](http://joel-costigliola.github.io/assertj/) (librairie d'assertions, fork de FestAssert)
+      * [Eclemma](http://www.eclemma.org/) (plugin couverture de code sous Eclipse)
+      * [InfiniTest](http://infinitest.github.io/) (plugin IntelliJ/Eclipse pour lancer les tests unitaires automatiquement à chaque changement)
+      * [MoreUnit](http://moreunit.sourceforge.net/) (plugin IntelliJ/Eclipse pour améliorer l'intégration de ses tests unitaires dans l'IDE)
+
+    ---
+
+    # Kata !
+
+    Whatever luck I had, I made. I was never a natural athlete, but I paid my dues in sweat and concentration and took the time necessary to learn Karate and become World Champion.
+
+    --
+
+    *Chuck Norris (American martial artist and actor. Also, the only man who has counted to infinity. Twice.)*
+
+    ---
+
+    # Un peu de théorie
+
+    Quoi de neuf dans Java 8 (release date : 18/03/2014)
+
+    * Interfaces - default method
+    * Date & Time
+    * Collections - forEach, ...
+    * Optional
+    * Lambda & FunctionalInterface
+    * Streams
+
+    ---
+   
+     # Un peu de théorie - Optional
+
+     Représente la présence ou non d'une valeur :
+   
+     ```java
+     Optional<Integer>
+     ```
+     
+     Eviter les null checks (isPresent, ifPresent)
+   
+     ```java
+     personRepository.getWinnerByName2(name)
+       .ifPresent(p -> sendMail(p.getMail(), "You win..."));
+     ```
+   
+     orElse, orElseGet, orElseThrow
+   
+     ```java   
+     personRepository.getWinnerByName3("Wendy")
+       .orElse(new Person().setName("anonymous"))
+       .getName());
+
+     personRepository.getWinnerByName3("Wendy")
+       .orElseGet(() -> personRepository.getWinnerByName3("Mathilde").get())
+       .getName());
+
+     personRepository.getWinnerByName3("Wendy")
+       .orElseThrow(IllegalArgumentException::new);
+     ```
+
+    ---
+
+     # Un peu de théorie - FunctionalInterface
+
+     Interface avec une unique méthode abstraite
+     
+     ```java   
+     @FunctionalInterface
+     ```
+     
+     (pas obligatoire)
+     
+     A la base des lambdas
+     
+    ---
+     
+     # Un peu de théorie - Lambda
+
+     Eviter les classes anonymes
+     ```java   
+     Name res = parser.parse("Eric Clapton", new Creator<Name>() {
+       @Override
+       public Name create(String firstName, String lastName) {
+         return new Name(firstName, lastName);
+       }
+     });
+     ```
+
+    Remplacé par :
+    ```java   
+    Name res = parser.parse("Eric Clapton", 
+      (firstName, lastName) -> new Name(firstName, lastName));
+    ```
+
+    ou :
+    ```java   
+    Name res = parser.parse("Eric Clapton", Name::new);
+    ```
+
+    ---
+
+    # Lambda - comment les écrire ?
+
+    ```java   
+    @FunctionalInterface
+    public interface Operation{
+      int calculer(int x, int y);
     }
-});</pre>
-            Remplacé par :
-            <pre>Name res = parser.parse("Eric Clapton", (firstName, lastName) -> new Name(firstName, lastName));</pre>
-            ou :
-            <pre>Name res = parser.parse("Eric Clapton", Name::new);</pre>
-        </li>
-    </ul>
-</section>
-<section id="theorie-lambda-2" class="coding-dojo">
-    <h1><i class="fa"></i>Lambda - comment les écrire ?</h1>
-    <pre>@FunctionalInterface
-public interface Operation{
-    int calculer(int x, int y);
-}</pre>
-    <img src="images/lambda.png" style="width: 75%"/>
-    <pre>Operation addition = (x,y) -> x + y;</pre>
-</section>
+    ```
 
-<section id="theorie-stream" class="coding-dojo">
-    <div style="height: 100%; width: 100%"><img src="images/java_stream.jpg" style="height: 100%; width: 100%"></div>
-</section>
+    ![](images/lambda.png)
+    ```java   
+    Operation addition = (x,y) -> x + y;
+    ```
 
-<section id="iteration1" class="iteration title">
-    <h1>On commence doucement (20 min)</h1>
-</section>
+    ---
 
-<section id="retro1" class="iteration">
-    <h1>Rétro (5 min)</h1>
-    <ul class="steps">
-        <li>Difficultés rencontrées</li>
-        <li>Périmètre du test</li>
-    </ul>
-</section>
+    ![](images/java_stream.jpg)
 
-<section id="memo" class="coding-dojo">
-    <h2>Mémo</h2>
-    <ul class="items steps">
-        <li>Regarder la doc : signature, exemple</li>
-        <li>Extraire les lambdas si plus d'une ligne</li>
-        <li>Limiter au plus tôt la quantité de données</li>
-    </ul>
-</section>
+    ---
 
-<section id="iteration2" class="iteration title">
-    <h1>Allez, on tente un peu plus dur ! (20 min)</h1>
-</section>
+    # Mémo
 
-<section id="retro2" class="iteration">
-    <h1>Rétro (5 min)</h1>
-    <ul class="steps">
-        <li>Difficultés rencontrées</li>
-        <li>Périmètre du test</li>
-    </ul>
-</section>
+    * Regarder la doc : signature, exemple
+    * Extraire les lambdas si plus d'une ligne
+    * Limiter au plus tôt la quantité de données
 
-<section id="iteration3" class="iteration title">
-    <h1>Et là, c'est chaud ou pas ? (20 min)</h1>
-</section>
+    ---
 
-<section id="retro3" class="iteration">
-    <h1>Rétro (5 min)</h1>
-    <ul class="steps">
-        <li>Difficultés rencontrées</li>
-        <li>Périmètre du test</li>
-    </ul>
-</section>
+    # Rétro du Dojo (10 min)
 
-<section id="retro_final" class="iteration">
-    <h1>Rétro du Dojo (10 min)</h1>
-    <ul class="steps">
-        <li>What went well ?</li>
-        <li>What could be improved ?</li>
-        <li>Actions</li>
-        <li>ROTI</li>
-    </ul>
-</section>
+    * What went well ?
+    * What could be improved ?
+    * Actions
+    * ROTI
 
-<section id="references" class="coding-dojo">
-    <h1><i class="fa fa-book"></i> Références</h1>
-    <a href="http://www.amazon.fr/Test-Driven-Development-By-Example/dp/0321146530"><img
-            src="images/testDrivenDevelopmentByExample.jpg"/></a>
-    <a href="http://www.amazon.fr/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882"><img
-            src="images/cleanCode.jpg"/></a>
-    <a href="http://www.amazon.fr/Effective-Java-Joshua-Bloch/dp/0321356683"><img
-            src="images/refactoringImprovingDesignExistingCode.jpg"/></a>
-    <a href="http://www.amazon.fr/Refactoring-Improving-Design-Existing-Code/dp/0201485672"><img
-            src="images/effectiveJava.jpeg"/></a>
-</section>
+    ---
 
-<script src="components/jquery/jquery.min.js"></script>
-<script src="components/keymaster/keymaster.js"></script>
-<script src="components/hammerjs/hammer.min.js"></script>
-<script src="components/highlightjs/highlight.pack.js"></script>
-<script src="components/prettify/run_prettify.js"></script>
-<script src="js/ruban.min.js"></script>
+    # Références
+
+
+    [![:scale 23%](images/testDrivenDevelopmentByExample.jpg)](http://www.amazon.fr/Test-Driven-Development-By-Example/dp/0321146530)     [![:scale 23%](images/cleanCode.jpg)](http://www.amazon.fr/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882)        [![:scale 23%](images/refactoringImprovingDesignExistingCode.jpg)](http://www.amazon.fr/Effective-Java-Joshua-Bloch/dp/0321356683)         [![:scale 23%](images/effectiveJava.jpeg)](http://www.amazon.fr/Refactoring-Improving-Design-Existing-Code/dp/0201485672)
+
+
+
+</textarea>
+
+<script src="downloads/remark-latest.min.js"></script>
+<script>var hljs = remark.highlighter.engine;</script>
+<script src="remark.language.js"></script>
 <script>
-    var ruban = new Ruban({
-        pagination: true
-    });
+  remark.macros.scale = function (percentage) {
+    var url = this;
+    return '<img src="' + url + '" style="width: ' + percentage + '" />';
+  };
+
+  var slideshow = remark.create({
+    highlightStyle: 'github',
+    highlightLanguage: 'remark',
+    highlightLines: true
+  }) ;
+</script>
+<script>
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-44561333-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script');
+    ga.src = 'https://ssl.google-analytics.com/ga.js';
+    var s = document.scripts[0];
+    s.parentNode.insertBefore(ga, s);
+  }());
 </script>
 </body>
 </html>

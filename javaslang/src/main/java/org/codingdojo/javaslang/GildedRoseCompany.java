@@ -26,7 +26,7 @@ public class GildedRoseCompany {
 		return shops.get(0);
 	}
 
-	public javaslang.collection.List<GildedRose> getShops() {
-		return javaslang.collection.List.ofAll(shops);
+	public List<GildedRose> getShops() {
+		return shops;
 	}
 }

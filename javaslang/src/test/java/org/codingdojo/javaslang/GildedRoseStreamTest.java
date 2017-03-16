@@ -44,8 +44,6 @@ public class GildedRoseStreamTest {
 		// When
 		List<String> itemsName = shop.getItems().map(Item::getName).sorted();
 
-		// shop.getItems().stream().sorted().collect(Collectors.toList());
-
 		// Then
 		assertThat(itemsName).containsExactly("+5 Dexterity Vest", "+5 Dexterity Vest", "Aged Brie",
 				"Backstage passes to a TAFKAL80ETC concert", "Backstage passes to a TAFKAL80ETC concert",
@@ -158,7 +156,6 @@ public class GildedRoseStreamTest {
 
 		// When
 		boolean allItemsHaveName = shop.getItems().forAll(i -> i.getName() != "");
-		;
 
 		// Then
 		assertThat(allItemsHaveName).isTrue();
